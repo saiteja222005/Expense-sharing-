@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #4CAF50;
+            padding: 10px;
+            color: white;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .navbar a:hover {
+            background-color: #45a049;
+        }
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .container h1 {
+            color: #333;
+        }
+        .form-container {
+            display: inline-block;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-container button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar" id="navbar">
+        <a href="bill-split.html">Bill Split</a>
+        <a href="profit-share.html">Profit Share</a>
+        <a href="scan-a-bill.html">Scan a Bill</a>
+        <a href="expenditure-list.html">Expenditure List</a>
+        <a href="invitation-link.html">Invitation Link</a>
+    </div>
+
+    <!-- Login Form -->
+    <div class="container">
+        <h1>Login to Your Account</h1>
+        <div class="form-container">
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <input type="text" id="username" placeholder="Enter your username" required><br>
+                <input type="password" id="password" placeholder="Enter your password" required><br>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+
+            // Get the username and password values
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Define users and their respective pages
+            var users = {
+                "user1": { password: "password1", redirectTo: "bill-split.html" },
+                "user2": { password: "password2", redirectTo: "profit-share.html" },
+                "user3": { password: "password3", redirectTo: "scan-a-bill.html" },
+                "user4": { password: "password4", redirectTo: "expenditure-list.html" },
+                "user5": { password: "password5", redirectTo: "invitation-link.html" }
+                // Add more users as needed
+            };
+
+            // Check if the entered username exists
+            if (users[username]) {
+                // Check if the password is correct
+                if (users[username].password === password) {
+                    // Hide the login form and display the navbar with allowed pages
+                    document.getElementById("loginForm").style.display = "none";
+                    document.getElementById("navbar").style.display = "flex";
+
+                    // Redirect to the respective page
+                    window.location.href = users[username].redirectTo;
+                } else {
+                    alert("Invalid password. Please try again.");
+                }
+            } else {
+                alert("Invalid username. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>

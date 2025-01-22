@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Expenditure Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Expenditure Tracker</h1>
+        <form id="expenditureForm">
+            <label for="date">Date</label>
+            <input type="date" id="date" required>
+
+            <label for="item">Item</label>
+            <input type="text" id="item" placeholder="Enter item name" required>
+
+            <label for="category">Category</label>
+            <input type="text" id="category" placeholder="e.g., Grocery, Transport" required>
+
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" placeholder="Enter amount" required>
+
+            <button type="submit">Add Expenditure</button>
+        </form>
+
+        <table id="expenditureTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be added dynamically -->
+            </tbody>
+        </table>
+
+        <button id="downloadBtn">Download as CSV</button>
+    </div>
+
+    <script>
+        // Get references to form, table, and button
+        const expenditureForm = document.getElementById("expenditureForm");
+        const expenditureTable = document.getElementById("expenditureTable").querySelector("tbody");
+        const downloadBtn = document.getElementById("downloadBtn");
+
+        // Array to store expenditures
+        const expenditures = [];
+
+        // Add event listener to the form
+        expenditureForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const date = document.getElementById("date").value;
+            const item = document.getElementById("item").value;
+            const category = document.getElementById("category").value;
+            const amount = document.getElementById("amount").value;
+
+            // Add to expenditures array
+            expenditures.push({ date, item, category, amount });
+
+            // Add to table
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${date}</td>
+                <td>${item}</td>
+                <td>${category}</td>
+                <td>${amount}</td>
+            `;
+            expenditureTable.appendChild(row);
+
+            // Clear form
+            expenditureForm.reset();
+        });
+
+        // Download expenditures as CSV
+        downloadBtn.addEventListener("click", () => {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                ["Date,Item,Category,Amount", ...expenditures.map(exp => 
+                `${exp.date},${exp.item},${exp.category},${exp.amount}`)].join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Daily_Expenditures.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
+</body>
+</html>

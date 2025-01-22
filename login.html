@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .message {
+            text-align: center;
+            color: red;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="signup-container">
+        <h2>Signup</h2>
+        <form id="signup-form">
+            <label for="signup-email">Email:</label>
+            <input type="email" id="signup-email" placeholder="Enter your email" required>
+            <label for="signup-password">Password:</label>
+            <input type="password" id="signup-password" placeholder="Enter your password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p class="message" id="signup-message"></p>
+        <div class="link">
+            <a href="#" id="to-login">Already have an account? Login</a>
+        </div>
+    </div>
+
+    <div class="container" id="login-container" style="display: none;">
+        <h2>Login</h2>
+        <form id="login-form">
+            <label for="login-email">Email:</label>
+            <input type="email" id="login-email" placeholder="Enter your email" required>
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" placeholder="Enter your password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p class="message" id="login-message"></p>
+        <div class="link">
+            <a href="#" id="to-signup">Don't have an account? Sign Up</a>
+        </div>
+    </div>
+
+    <!-- Redirecting Anchor Tag -->
+    <div class="link" id="redirect-link" style="display: none;">
+        <a href="welcome.html">Go to Welcome Page</a>
+    </div>
+
+    <script>
+        const signupContainer = document.getElementById("signup-container");
+        const loginContainer = document.getElementById("login-container");
+        const signupForm = document.getElementById("signup-form");
+        const loginForm = document.getElementById("login-form");
+        const signupMessage = document.getElementById("signup-message");
+        const loginMessage = document.getElementById("login-message");
+        const redirectLink = document.getElementById("redirect-link");
+
+        // Switch to Login Form
+        document.getElementById("to-login").addEventListener("click", () => {
+            signupContainer.style.display = "none";
+            loginContainer.style.display = "block";
+        });
+
+        // Switch to Signup Form
+        document.getElementById("to-signup").addEventListener("click", () => {
+            loginContainer.style.display = "none";
+            signupContainer.style.display = "block";
+        });
+
+        // Signup Form Submission
+        signupForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = document.getElementById("signup-email").value;
+            const password = document.getElementById("signup-password").value;
+
+            // Store credentials in localStorage (for demonstration purposes)
+            localStorage.setItem(email, password);
+            signupMessage.textContent = "Signup successful! You can now login.";
+            signupMessage.style.color = "green";
+
+            // Clear form fields
+            signupForm.reset();
+        });
+
+        // Login Form Submission
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+
+            // Check credentials in localStorage
+            const storedPassword = localStorage.getItem(email);
+            if (storedPassword === password) {
+                loginMessage.textContent = "Login successful!";
+                loginMessage.style.color = "green";
+
+                // Show redirect link
+                redirectLink.style.display = "block";
+            } else {
+                loginMessage.textContent = "Invalid email or password.";
+                loginMessage.style.color = "red";
+            }
+
+            // Clear form fields
+            loginForm.reset();
+        });
+    </script>
+</body>
+</html>
