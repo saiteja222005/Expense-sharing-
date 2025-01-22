@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitation Link</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .invite-section {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .share-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .share-buttons a {
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .share-buttons a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="invite-section">
+        <button onclick="generateLink()">Generate Invitation Link</button>
+        <input type="text" id="invitationLink" readonly placeholder="Your link will appear here">
+        <button onclick="copyLink()" id="copyLinkBtn" disabled>Copy Link</button>
+        <div class="share-buttons">
+            <a href="#" id="whatsappShare" target="_blank">WhatsApp</a>
+            <a href="#" id="facebookShare" target="_blank">Facebook</a>
+            <a href="#" id="telegramShare" target="_blank">Telegram</a>
+        </div>
+    </div>
+
+    <script>
+        function generateLink() {
+            // Simulating the link generation process for testing
+            const mockData = { link: "https://billbuy.com/invite?code=123456" };
+
+            // Instead of fetching from the backend, using mock data
+            const inputField = document.getElementById("invitationLink");
+            inputField.value = mockData.link;
+            document.getElementById("copyLinkBtn").disabled = false;
+
+            // Update the share links
+            const whatsappShare = document.getElementById("whatsappShare");
+            const facebookShare = document.getElementById("facebookShare");
+            const telegramShare = document.getElementById("telegramShare");
+
+            whatsappShare.href = `https://wa.me/?text=${encodeURIComponent(mockData.link)}`;
+            facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(mockData.link)}`;
+            telegramShare.href = `https://t.me/share/url?url=${encodeURIComponent(mockData.link)}&text=Check%20this%20out!`;
+        }
+
+        function copyLink() {
+            const inputField = document.getElementById("invitationLink");
+            inputField.select();
+            inputField.setSelectionRange(0, 99999); /* For mobile devices */
+            navigator.clipboard.writeText(inputField.value).then(() => {
+                alert("Invitation link copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy text: ", err);
+            });
+        }
+    </script>
+</body>
+</html>
