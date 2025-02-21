@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Sharing App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 400px;
+      margin: 50px auto;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-size: 14px;
+      color: #555;
+    }
+
+    input, button {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .nav-button {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .output {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f0f8ff;
+      border: 1px solid #007bff;
+      border-radius: 5px;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+
+    .friend-list {
+      margin-top: 10px;
+    }
+
+    .friend-list ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .friend-list li {
+      background-color: #f0f0f0;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Page -->
+  <div id="auth-page" class="container">
+    <h1>Expense Sharing App</h1>
+    <h2>Login</h2>
+    <form id="login-form">
+      <label for="login-email">Email:</label>
+      <input type="email" id="login-email" placeholder="Enter your email" required>
+      <span id="email-error" class="error hidden">Please enter a valid email.</span>
+      <label for="login-password">Password:</label>
+      <input type="password" id="login-password" placeholder="Enter your password" required>
+      <span id="password-error" class="error hidden">Please enter a password.</span>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <!-- Home Page -->
+  <div id="home-page" class="container hidden">
+    <header>
+      <h1>Welcome, <span id="user-email">user@example.com</span></h1>
+    </header>
+    <nav>
+      <button class="nav-button" data-page="bill-split-page">Bill Split</button>
+      <button class="nav-button" data-page="profit-share-page">Profit Share</button>
+      <button class="nav-button" data-page="expenditure-list-page">Expenditure List</button>
+      <button class="nav-button" data-page="join-friends-page">Join Friends to Bill</button>
+      <button class="nav-button" data-page="scan-bill-page">Scan Bill</button>
+      <button class="nav-button" data-page="invitation-link-page">Invitation Link</button>
+    </nav>
+  </div>
+
+  <!-- Bill Split Page -->
+  <div id="bill-split-page" class="container hidden">
+    <h2>Bill Split</h2>
+    <label for="total-amount">Total Amount:</label>
+    <input type="number" id="total-amount" placeholder="Enter total amount" required>
+    <label for="num-members">Number of Members:</label>
+    <input type="number" id="num-members" placeholder="Enter number of members" required>
+    <button id="split-button">Split</button>
+    <div id="split-output" class="output hidden"></div>
+    <button class="back-button">Back</button>
+  </div>
+
+  <!-- Profit Share Page -->
+  <div id="profit-share-page" class="container hidden">
+    <h2>Profit Share</h2>
+    <label for="total-profit">Total Profit:</label>
+    <input type="number" id="total-profit" placeholder="Enter total profit" required>
+    <label for="num-members-profit">Number of Members:</label>
+    <input type="number" id="num-members-profit" placeholder="Enter number of members" required>
+    <button id="share-profit-button">Share Profit</button>
+    <div id="share-profit-output" class="output hidden"></div>
+    <button class="back-button">Back</button>
+  </div>
+
+  <!-- Expenditure List Page -->
+  <div id="expenditure-list-page" class="container hidden">
+    <h2>Expenditure List</h2>
+    <label for="date">Date:</label>
+    <input type="date" id="expenditure-date" required>
+    <label for="item">Item:</label>
+    <input type="text" id="expenditure-item" required>
+    <label for="category">Category:</label>
+    <input type="text" id="expenditure-category" required>
+    <label for="amount">Amount:</label>
+    <input type="number" id="expenditure-amount" required>
+    <button id="add-expenditure-button">Add to List</button>
+    <ul id="expenditure-list"></ul>
+    <button class="back-button">Back</button>
+  </div>
+
+  <!-- Join Friends Page -->
+  <div id="join-friends-page" class="container hidden">
+    <h2>Join Friends to Bill</h2>
+    <label for="friend-name">Friend Name:</label>
+    <input type="text" id="friend-name" placeholder="Enter friend's name" required>
+    <button id="add-friend-button">Add Friend</button>
+    <div class="friend-list">
+      <ul id="friends-list"></ul>
+    </div>
+    <label for="total-amount-friends">Total Amount:</label>
+    <input type="number" id="total-amount-friends" placeholder="Enter total amount" required>
+    <button id="split-friends-button">Split Amount</button>
+    <div id="split-friends-output" class="output hidden"></div>
+    <button class="back-button">Back</button>
+  </div>
+
+  <script>
+    // Get elements
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('login-email');
+    const passwordInput = document.getElementById('login-password');
+    const emailError = document.getElementById('email-error');
+    const passwordError = document.getElementById('password-error');
+    const homePage = document.getElementById('home-page');
+    const authPage = document.getElementById('auth-page');
+
+    const splitButton = document.getElementById('split-button');
+    const totalAmountInput = document.getElementById('total-amount');
+    const numMembersInput = document.getElementById('num-members');
+    const splitOutput = document.getElementById('split-output');
+
+    const shareProfitButton = document.getElementById('share-profit-button');
+    const totalProfitInput = document.getElementById('total-profit');
+    const numMembersProfitInput = document.getElementById('num-members-profit');
+    const shareProfitOutput = document.getElementById('share-profit-output');
+
+    const addExpenditureButton = document.getElementById('add-expenditure-button');
+    const expenditureDateInput = document.getElementById('expenditure-date');
+    const expenditureItemInput = document.getElementById('expenditure-item');
+    const expenditureCategoryInput = document.getElementById('expenditure-category');
+    const expenditureAmountInput = document.getElementById('expenditure-amount');
+    const expenditureList = document.getElementById('expenditure-list');
+
+    const addFriendButton = document.getElementById('add-friend-button');
+    const friendNameInput = document.getElementById('friend-name');
+    const friendsList = document.getElementById('friends-list');
+    const totalAmountFriendsInput = document.getElementById('total-amount-friends');
+    const splitFriendsButton = document.getElementById('split-friends-button');
+    const splitFriendsOutput = document.getElementById('split-friends-output');
+
+    // Handle login form submission
+    loginForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (email && password) {
+        authPage.classList.add('hidden');
+        homePage.classList.remove('hidden');
+        document.getElementById('user-email').textContent = email;
+
+        emailError.classList.add('hidden');
+        passwordError.classList.add('hidden');
+      } else {
+        if (!email) emailError.classList.remove('hidden');
+        if (!password) passwordError.classList.remove('hidden');
+      }
+    });
+
+    // Handle navigation to different pages
+    function showPage(page) {
+      const pages = document.querySelectorAll('.container');
+      pages.forEach(p => p.classList.add('hidden'));
+      document.getElementById(page).classList.remove('hidden');
+    }
+
+    // Add event listeners for navigation
+    document.querySelectorAll('.nav-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const page = button.getAttribute('data-page');
+        showPage(page);
+      });
+    });
+
+    // Handle bill split functionality
+    splitButton.addEventListener('click', function() {
+      const totalAmount = parseFloat(totalAmountInput.value);
+      const numMembers = parseInt(numMembersInput.value);
+
+      if (totalAmount && numMembers) {
+        const amountPerPerson = (totalAmount / numMembers).toFixed(2);
+        splitOutput.textContent = `Each person should pay ₹${amountPerPerson}`;
+        splitOutput.classList.remove('hidden');
+      } else {
+        splitOutput.textContent = 'Please enter valid values for amount and members.';
+        splitOutput.classList.remove('hidden');
+      }
+    });
+
+    // Handle profit share functionality
+    shareProfitButton.addEventListener('click', function() {
+      const totalProfit = parseFloat(totalProfitInput.value);
+      const numMembers = parseInt(numMembersProfitInput.value);
+
+      if (totalProfit && numMembers) {
+        const profitPerPerson = (totalProfit / numMembers).toFixed(2);
+        shareProfitOutput.textContent = `Each person should receive ₹${profitPerPerson}`;
+        shareProfitOutput.classList.remove('hidden');
+      } else {
+        shareProfitOutput.textContent = 'Please enter valid values for profit and members.';
+        shareProfitOutput.classList.remove('hidden');
+      }
+    });
+
+    // Handle expenditure list functionality
+    addExpenditureButton.addEventListener('click', function() {
+      const date = expenditureDateInput.value;
+      const item = expenditureItemInput.value.trim();
+      const category = expenditureCategoryInput.value.trim();
+      const amount = parseFloat(expenditureAmountInput.value);
+
+      if (date && item && category && amount) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${date} - ${item} - ${category} - ₹${amount}`;
+        expenditureList.appendChild(listItem);
+      } else {
+        alert('Please fill all fields correctly.');
+      }
+    });
+
+    // Handle join friends to bill functionality
+    addFriendButton.addEventListener('click', function() {
+      const friendName = friendNameInput.value.trim();
+
+      if (friendName) {
+        const listItem = document.createElement('li');
+        listItem.textContent = friendName;
+        friendsList.appendChild(listItem);
+        friendNameInput.value = ''; // Reset the input
+      } else {
+        alert('Please enter a friend name.');
+      }
+    });
+
+    splitFriendsButton.addEventListener('click', function() {
+      const totalAmount = parseFloat(totalAmountFriendsInput.value);
+      const friends = friendsList.querySelectorAll('li');
+      const numFriends = friends.length;
+
+      if (totalAmount && numFriends > 0) {
+        const amountPerFriend = (totalAmount / numFriends).toFixed(2);
+        splitFriendsOutput.textContent = `Each friend should contribute ₹${amountPerFriend}`;
+        splitFriendsOutput.classList.remove('hidden');
+      } else {
+        splitFriendsOutput.textContent = 'Please enter a valid amount and add at least one friend.';
+        splitFriendsOutput.classList.remove('hidden');
+      }
+    });
+  </script>
+
+</body>
+</html>
